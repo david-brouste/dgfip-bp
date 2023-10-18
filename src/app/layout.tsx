@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import * as fs from "fs";
+import {generateTitulaire} from "@/lib/utils";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,6 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  fs.writeFileSync('src/app/api/bp/db.json', JSON.stringify(generateTitulaire(200)));
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
