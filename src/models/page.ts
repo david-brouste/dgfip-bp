@@ -60,7 +60,7 @@ export class Page<T> {
         this.content = items.slice(startIndex, endIndex);
         this.empty = !this.content || this.content.length === 0;
         this.first = page === FIRST_PAGE;
-        this.last = page === totalPages;
+        this.last = page >= totalPages - 1;
         this.number = startIndex;
         this.numberOfElements = pageSize;
         this.pageable = new Pageable(page, pageSize);
