@@ -22,7 +22,7 @@ export class Pageable {
         page = FIRST_PAGE,
         pageSize = DEFAULT_PAGE_SIZE
     ) {
-        this.offset = (page - 1) * pageSize;
+        this.offset = page * pageSize;
         this.pageNumber = page;
         this.pageSize = pageSize;
         this.paged = true;
@@ -48,13 +48,13 @@ export class Page<T> {
         page = FIRST_PAGE,
         pageSize = DEFAULT_PAGE_SIZE
     ) {
-        page = page < 1 ? FIRST_PAGE : page;
+        page = page < 0 ? FIRST_PAGE : page;
         pageSize = pageSize < 1 ? DEFAULT_PAGE_SIZE : pageSize;
         items = items ?? [];
         const totalElements = items.length;
         const totalPages = Math.ceil(totalElements / pageSize);
-        const startIndex = (page - 1) * pageSize;
-        let endIndex = page * pageSize;
+        const startIndex = page * pageSize;
+        let endIndex = (page + 1) * pageSize;
         endIndex = endIndex > totalElements ? totalElements : endIndex;
 
         this.content = items.slice(startIndex, endIndex);
