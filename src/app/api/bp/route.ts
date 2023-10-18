@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const pageSize: number = parseIntDefault(searchParams.get('pageSize'), DEFAULT_PAGE_SIZE);
 
     // Appliquez la recherche par nom et prénom
-    let titulaireList: Titulaire[] = JSON.parse(fs.readFileSync('src/app/api/bp/db.json','utf-8'));
+    let titulaireList: Titulaire[] = JSON.parse(fs.readFileSync(process.cwd() + '/public/db.json','utf-8'));
     if (nom) {
         titulaireList = titulaireList.filter(
             (titulaire: Titulaire) => {

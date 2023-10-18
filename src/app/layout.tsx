@@ -16,7 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  fs.writeFileSync('src/app/api/bp/db.json', JSON.stringify(generateTitulaire(200)));
+  fs.writeFileSync(process.cwd() + '/public/db.json', JSON.stringify(generateTitulaire(200)));
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
