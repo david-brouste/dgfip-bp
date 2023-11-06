@@ -1,6 +1,318 @@
 import {Titulaire} from "@/models/titulaire";
 import {fakerFR, SexType} from '@faker-js/faker';
 import {UtilisateurDeclare} from "@/models/utilisateur-declare";
+import {BP} from "@/models/bp";
+
+const bpList: BP[] = [
+    {
+        "code": 98800,
+        "localite": "NOUMEA"
+    },
+    {
+        "code": 98801,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98802,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98803,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98804,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98805,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98806,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98807,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98809,
+        "localite": "MONT DORE"
+    },
+    {
+        "code": 98810,
+        "localite": "MONT DORE"
+    },
+    {
+        "code": 98811,
+        "localite": "BELEP"
+    },
+    {
+        "code": 98812,
+        "localite": "BOULOUPARIS"
+    },
+    {
+        "code": 98813,
+        "localite": "CANALA"
+    },
+    {
+        "code": 98814,
+        "localite": "FAYAOUE"
+    },
+    {
+        "code": 98815,
+        "localite": "HIENGHENE"
+    },
+    {
+        "code": 98816,
+        "localite": "HOUAILOU"
+    },
+    {
+        "code": 98817,
+        "localite": "KAALA GOMEN"
+    },
+    {
+        "code": 98818,
+        "localite": "KOUAOUA"
+    },
+    {
+        "code": 98819,
+        "localite": "MOINDOU"
+    },
+    {
+        "code": 98820,
+        "localite": "WE"
+    },
+    {
+        "code": 98821,
+        "localite": "OUEGOA"
+    },
+    {
+        "code": 98822,
+        "localite": "POINDIMIE"
+    },
+    {
+        "code": 98823,
+        "localite": "PONERIHOUEN"
+    },
+    {
+        "code": 98824,
+        "localite": "POUEBO"
+    },
+    {
+        "code": 98825,
+        "localite": "POUEMBOUT"
+    },
+    {
+        "code": 98826,
+        "localite": "POUM"
+    },
+    {
+        "code": 98827,
+        "localite": "POYA"
+    },
+    {
+        "code": 98828,
+        "localite": "TADINE"
+    },
+    {
+        "code": 98829,
+        "localite": "THIO"
+    },
+    {
+        "code": 98830,
+        "localite": "DUMBEA"
+    },
+    {
+        "code": 98831,
+        "localite": "TOUHO"
+    },
+    {
+        "code": 98832,
+        "localite": "VAO"
+    },
+    {
+        "code": 98833,
+        "localite": "VOH"
+    },
+    {
+        "code": 98834,
+        "localite": "YATE"
+    },
+    {
+        "code": 98835,
+        "localite": "DUMBEA"
+    },
+    {
+        "code": 98836,
+        "localite": "DUMBEA GA"
+    },
+    {
+        "code": 98837,
+        "localite": "DUMBEA"
+    },
+    {
+        "code": 98838,
+        "localite": "PORO"
+    },
+    {
+        "code": 98839,
+        "localite": "DUMBEA"
+    },
+    {
+        "code": 98840,
+        "localite": "TONTOUTA"
+    },
+    {
+        "code": 98841,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98843,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98844,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98845,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98846,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98847,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98848,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98849,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98850,
+        "localite": "KOUMAC"
+    },
+    {
+        "code": 98851,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98852,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98853,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98855,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98857,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98859,
+        "localite": "KONE"
+    },
+    {
+        "code": 98860,
+        "localite": "KONE"
+    },
+    {
+        "code": 98862,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98863,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98865,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98866,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98870,
+        "localite": "BOURAIL"
+    },
+    {
+        "code": 98874,
+        "localite": "PONT DES FRANÇAIS"
+    },
+    {
+        "code": 98875,
+        "localite": "PLUM"
+    },
+    {
+        "code": 98876,
+        "localite": "LA COULEE"
+    },
+    {
+        "code": 98877,
+        "localite": "NEPOUI"
+    },
+    {
+        "code": 98878,
+        "localite": "LA ROCHE"
+    },
+    {
+        "code": 98880,
+        "localite": "LA FOA"
+    },
+    {
+        "code": 98881,
+        "localite": "FARINO"
+    },
+    {
+        "code": 98882,
+        "localite": "SARRAMEA"
+    },
+    {
+        "code": 98883,
+        "localite": "OUACO"
+    },
+    {
+        "code": 98884,
+        "localite": "CHEPENEHE"
+    },
+    {
+        "code": 98885,
+        "localite": "MOU"
+    },
+    {
+        "code": 98889,
+        "localite": "PAITA"
+    },
+    {
+        "code": 98890,
+        "localite": "PAITA"
+    },
+    {
+        "code": 98895,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98897,
+        "localite": "NOUMEA CEDEX"
+    },
+    {
+        "code": 98899,
+        "localite": "NOUMEA CEDEX "
+    }
+];
 
 export function randomBoolean(): boolean {
     return Math.random() < 0.5;
@@ -14,22 +326,27 @@ export function generateTitulaire(nbTitulaire: number): Titulaire[] {
 }
 
 export function createRandomTitulaire(): Titulaire {
-    const dateNaissance = fakerFR.date.birthdate();
-    dateNaissance.setHours(0, 0, 0, 0);
+    const dateNaissance = fakerFR.date.birthdate().toISOString().split('T')[0];
     const sexType: SexType = fakerFR.person.sexType();
     const isNomUsage = randomBoolean();
     const isPrenom2 = randomBoolean();
     const isUtilisateurDeclare = Math.random() < 0.3;
     const nbUtilisateursDeclares = random(1, 9);
+    const bp = bpList[random(0, bpList.length - 1)];
     return {
+        id: fakerFR.number.int(),
         nomNaissance: fakerFR.person.lastName(sexType),
         nomUsage: sexType === 'female' && isNomUsage ? fakerFR.person.lastName(sexType) : undefined,
         prenom1: fakerFR.person.firstName(sexType),
         prenom2: isPrenom2 ? fakerFR.person.middleName(sexType) : undefined,
         dateNaissance: dateNaissance,
+        bp: 'BP ' + fakerFR.location.zipCode('###'),
+        codePostal: bp.code,
+        localite: bp.localite,
         utilisateursDeclares: isUtilisateurDeclare ?
             fakerFR.helpers.multiple(createRandomUtilisateurDeclare, {count: nbUtilisateursDeclares}) :
-            []
+            [],
+        dateMiseAJour: fakerFR.date.past()
     }
 }
 

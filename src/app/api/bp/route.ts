@@ -3,6 +3,7 @@ import fs from "fs";
 import {Titulaire} from "@/models/titulaire";
 import {parseBoolean, parseIntDefault} from "@/lib/utils";
 import {DEFAULT_PAGE_SIZE, FIRST_PAGE} from "@/lib/constants";
+import {UtilisateurDeclare} from "@/models/utilisateur-declare";
 
 export async function GET(request: Request) {
     const {searchParams} = new URL(request.url);
@@ -19,13 +20,20 @@ export async function GET(request: Request) {
             (titulaire: Titulaire) => {
                 const isIncludedInNomNaissance = titulaire.nomNaissance.includes(nom);
                 const isIncludedInNomUsage = extendNomUsage && !!titulaire.nomUsage?.includes(nom);
-                return isIncludedInNomNaissance || isIncludedInNomUsage;
+                const isIncludedInUtilisateursDeclares = titulaire.utilisateursDeclares
+                    .map((utilisateurDeclare: UtilisateurDeclare) => utilisateurDeclare.nom).includes(nom);
+                return isIncludedInNomNaissance || isIncludedInNomUsage || isIncludedInUtilisateursDeclares;
             }
         );
     }
     if (prenom) {
         titulaireList = titulaireList.filter(
-            (titulaire: Titulaire) => titulaire.prenom1.includes(prenom) || titulaire.prenom2?.includes(prenom)
+            (titulaire: Titulaire) => {
+                const isIncludedInTitulaire = titulaire.prenom1.includes(prenom) || titulaire.prenom2?.includes(prenom);
+                const isIncludedInUtilisateurDeclare = titulaire.utilisateursDeclares
+                    .map((utilisateurDeclare: UtilisateurDeclare) => utilisateurDeclare.prenom).includes(prenom);
+                return isIncludedInTitulaire || isIncludedInUtilisateurDeclare;
+            }
         );
     }
 
