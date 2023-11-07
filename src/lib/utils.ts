@@ -368,3 +368,13 @@ export function parseIntDefault(input: string|undefined|null, defaultValue: numb
 export function parseBoolean(input: string|undefined|null): boolean {
     return !!input && input.toLowerCase() === 'true';
 }
+
+export function normalizeLowerString(input: string | undefined | null): string|undefined {
+    if (!input || input.trim() === '') {
+        return undefined;
+    }
+    return input.normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
