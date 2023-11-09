@@ -33,16 +33,16 @@ export class Pageable {
 
 export class Page<T> {
     content: T[];
-    empty: boolean;
-    first: boolean;
-    last: boolean;
-    number: number;
-    numberOfElements: number;
     pageable: Pageable;
-    size: number;
-    sort: Sort;
+    last: boolean;
     totalElements: number;
     totalPages: number;
+    size: number;
+    number: number;
+    sort: Sort;
+    first: boolean;
+    numberOfElements: number;
+    empty: boolean;
     constructor(
         items: T[]|undefined,
         page = FIRST_PAGE,
