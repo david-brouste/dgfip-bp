@@ -352,8 +352,8 @@ export function createRandomTitulaire(): Titulaire {
 
 export function createRandomUtilisateurDeclare(): UtilisateurDeclare {
     return {
-        nom: fakerFR.person.lastName(),
-        prenom: fakerFR.person.firstName()
+        nom: fakerFR.person.lastName().toUpperCase(),
+        prenom: capitalizePrenom(fakerFR.person.firstName()) as string
     }
 }
 
