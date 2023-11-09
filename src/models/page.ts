@@ -11,22 +11,22 @@ export class Sort {
     }
 }
 export class Pageable {
-    offset: number;
-    pageNumber: number;
-    pageSize: number;
-    paged: boolean;
     sort: Sort;
+    offset: number;
+    pageSize: number;
+    pageNumber: number;
+    paged: boolean;
     unpaged: boolean;
 
     constructor(
         page = FIRST_PAGE,
         pageSize = DEFAULT_PAGE_SIZE
     ) {
-        this.offset = page * pageSize;
-        this.pageNumber = page;
-        this.pageSize = pageSize;
-        this.paged = true;
         this.sort = new Sort();
+        this.offset = page * pageSize;
+        this.pageSize = pageSize;
+        this.pageNumber = page;
+        this.paged = true;
         this.unpaged = false;
     }
 }
@@ -58,15 +58,15 @@ export class Page<T> {
         endIndex = endIndex > totalElements ? totalElements : endIndex;
 
         this.content = items.slice(startIndex, endIndex);
-        this.empty = !this.content || this.content.length === 0;
-        this.first = page === FIRST_PAGE;
-        this.last = page >= totalPages - 1;
-        this.number = startIndex;
-        this.numberOfElements = pageSize;
         this.pageable = new Pageable(page, pageSize);
-        this.size = pageSize;
-        this.sort = new Sort();
+        this.last = page >= totalPages - 1;
         this.totalElements = totalElements;
         this.totalPages = totalPages;
+        this.size = pageSize;
+        this.number = startIndex;
+        this.sort = new Sort();
+        this.first = page === FIRST_PAGE;
+        this.numberOfElements = pageSize;
+        this.empty = !this.content || this.content.length === 0;
     }
 }
