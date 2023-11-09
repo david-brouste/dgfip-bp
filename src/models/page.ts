@@ -66,7 +66,7 @@ export class Page<T> {
         this.number = startIndex;
         this.sort = new Sort();
         this.first = page === FIRST_PAGE;
-        this.numberOfElements = pageSize;
+        this.numberOfElements = this.content.length;
         this.empty = !this.content || this.content.length === 0;
     }
 }
