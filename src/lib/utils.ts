@@ -335,12 +335,12 @@ export function createRandomTitulaire(): Titulaire {
     const bp = bpList[random(0, bpList.length - 1)];
     return {
         id: fakerFR.number.int(),
-        nomNaissance: fakerFR.person.lastName(sexType),
-        nomUsage: sexType === 'female' && isNomUsage ? fakerFR.person.lastName(sexType) : undefined,
-        prenom1: fakerFR.person.firstName(sexType),
-        prenom2: isPrenom2 ? fakerFR.person.middleName(sexType) : undefined,
+        nomNaissance: fakerFR.person.lastName(sexType).toUpperCase(),
+        nomUsage: sexType === 'female' && isNomUsage ? fakerFR.person.lastName(sexType).toUpperCase(): undefined,
+        prenom1: capitalizePrenom(fakerFR.person.firstName(sexType)) as string,
+        prenom2: isPrenom2 ? capitalizePrenom(fakerFR.person.middleName(sexType)) : undefined,
         dateNaissance: dateNaissance,
-        bp: 'BP ' + fakerFR.location.zipCode('###'),
+        bp: fakerFR.location.zipCode('###'),
         codePostal: bp.code,
         localite: bp.localite,
         utilisateursDeclares: isUtilisateurDeclare ?
@@ -377,4 +377,21 @@ export function normalizeLowerString(input: string | undefined | null): string|u
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase()
         .trim();
+}
+
+export function capitalizePrenom(input: string | undefined | null): string | undefined {
+    if (!input || input.trim() === '') {
+        return undefined;
+    }
+    return input
+        .split('-')
+        .map((word: string) => capitalize(word))
+        .join('-');
+}
+
+export function capitalize(input: string | undefined | null): string | undefined {
+    if (!input || input.trim() === '') {
+        return undefined;
+    }
+    return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
 }
