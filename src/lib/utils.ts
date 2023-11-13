@@ -1,4 +1,4 @@
-import {Titulaire} from "@/models/titulaire";
+import {StatutContrat, Titulaire} from "@/models/titulaire";
 import {fakerFR, SexType} from '@faker-js/faker';
 import {UtilisateurDeclare} from "@/models/utilisateur-declare";
 import {BP} from "@/models/bp";
@@ -333,19 +333,23 @@ export function createRandomTitulaire(): Titulaire {
     const isUtilisateurDeclare = Math.random() < 0.3;
     const nbUtilisateursDeclares = random(1, 9);
     const bp = bpList[random(0, bpList.length - 1)];
+    const statutContrat = Math.random() < 0.7 ?
+        StatutContrat.ACTIF :
+        (Math.random() < 0.96 ? StatutContrat.RESILIE : StatutContrat.BROUILLON);
     return {
-        id: fakerFR.number.int(),
         nomNaissance: fakerFR.person.lastName(sexType).toUpperCase(),
         nomUsage: sexType === 'female' && isNomUsage ? fakerFR.person.lastName(sexType).toUpperCase(): undefined,
         prenom1: capitalizePrenom(fakerFR.person.firstName(sexType)) as string,
         prenom2: isPrenom2 ? capitalizePrenom(fakerFR.person.middleName(sexType)) : undefined,
         dateNaissance: dateNaissance,
-        bp: fakerFR.location.zipCode('###'),
+        bp: fakerFR.location.zipCode('####').replace(/^0+/, ''),
         codePostal: bp.code,
         localite: bp.localite,
         utilisateursDeclares: isUtilisateurDeclare ?
             fakerFR.helpers.multiple(createRandomUtilisateurDeclare, {count: nbUtilisateursDeclares}) :
             [],
+        statutContrat: statutContrat,
+        dateCreation: fakerFR.date.past(),
         dateMiseAJour: fakerFR.date.past()
     }
 }
@@ -365,8 +369,18 @@ export function parseIntDefault(input: string|undefined|null, defaultValue: numb
     }
 }
 
-export function parseBoolean(input: string|undefined|null): boolean {
-    return !!input && input.toLowerCase() === 'true';
+export function parseBooleanWithException(input: string|undefined|null, defaultValue: boolean): boolean {
+    const lowercaseValue = input?.toLowerCase();
+    if (lowercaseValue === undefined) {
+        return defaultValue;
+    }
+    if (lowercaseValue === 'true' || lowercaseValue === '1') {
+        return true;
+    } else if (lowercaseValue === 'false' || lowercaseValue === '0') {
+        return false;
+    } else {
+        throw new Error('La valeur doit être true, 1, false, ou 0 et non ' + input);
+    }
 }
 
 export function normalizeLowerString(input: string | undefined | null): string|undefined {

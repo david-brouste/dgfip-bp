@@ -46,23 +46,23 @@ export class Page<T> {
     constructor(
         items: T[]|undefined,
         page = FIRST_PAGE,
-        pageSize = DEFAULT_PAGE_SIZE
+        size = DEFAULT_PAGE_SIZE
     ) {
         page = page < 0 ? FIRST_PAGE : page;
-        pageSize = pageSize < 1 ? DEFAULT_PAGE_SIZE : pageSize;
+        size = size < 1 ? DEFAULT_PAGE_SIZE : size;
         items = items ?? [];
         const totalElements = items.length;
-        const totalPages = Math.ceil(totalElements / pageSize);
-        const startIndex = page * pageSize;
-        let endIndex = (page + 1) * pageSize;
+        const totalPages = Math.ceil(totalElements / size);
+        const startIndex = page * size;
+        let endIndex = (page + 1) * size;
         endIndex = endIndex > totalElements ? totalElements : endIndex;
 
         this.content = items.slice(startIndex, endIndex);
-        this.pageable = new Pageable(page, pageSize);
+        this.pageable = new Pageable(page, size);
         this.last = page >= totalPages - 1;
         this.totalElements = totalElements;
         this.totalPages = totalPages;
-        this.size = pageSize;
+        this.size = size;
         this.number = startIndex;
         this.sort = new Sort();
         this.first = page === FIRST_PAGE;
