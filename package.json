@@ -8,6 +8,10 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": ">=20.9.0",
+    "yarn": ">=1.22.19"
+  },
   "dependencies": {
     "@faker-js/faker": "^8.2.0",
     "next": "13.5.5",
