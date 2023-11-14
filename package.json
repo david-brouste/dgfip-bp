@@ -10,16 +10,19 @@
   },
   "dependencies": {
     "@faker-js/faker": "^8.2.0",
+    "next": "13.5.5",
     "react": "^18",
     "react-dom": "^18",
-    "next": "13.5.5"
+    "swagger-ui-react": "5.9.4",
+    "yaml": "^2.3.4"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/swagger-ui-react": "^4.18.3",
     "eslint": "^8",
-    "eslint-config-next": "13.5.5"
+    "eslint-config-next": "13.5.5",
+    "typescript": "^5"
   }
 }

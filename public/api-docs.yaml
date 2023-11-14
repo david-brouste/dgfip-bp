@@ -1,0 +1,201 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition for Apigee Controller
+  version: v1
+servers:
+- url: https://dgfip-bp.vercel.app
+  description: Apigee Boite Postale Testing Server
+tags:
+- name: Apigee
+  description: API mise à disposition depuis la plateforme APIGEE
+paths:
+  /api/bp:
+    get:
+      tags:
+      - Apigee
+      summary: Renvoi tous les contrats correspondant aux critères de recherches sous
+        forme paginée
+      operationId: getAllBoitesPostales
+      parameters:
+      - name: nom
+        in: query
+        description: nom de naissance du titulaire ou de la personne déclarée
+        required: false
+        schema:
+          type: string
+      - name: prenom
+        in: query
+        description: prenom du titulaire ou de la personne déclarée
+        required: false
+        schema:
+          type: string
+      - name: etendreNomNaissance
+        in: query
+        description: booleen pour étendre la recherche au nom de naissance
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: pageable
+        in: query
+        description: pageable pour la pagination
+        required: false
+        schema:
+          $ref: '#/components/schemas/Pageable'
+      responses:
+        "400":
+          description: Un des paramètres est incorrect
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneriqueError'
+              example:
+                error: "etendreNomNaissance doit être du type boolean: dzqd"
+                status: 400
+        "500":
+          description: Une erreur interne s'est produite lors de la recherche
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneriqueError'
+              example:
+                error: Une erreur interne s'est produite
+                status: 500
+        "200":
+          description: Retourne une page correspondant aux critères de recherches
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageApigeeBoitePostaleRecord'
+components:
+  schemas:
+    GeneriqueError:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: integer
+          format: int32
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            type: string
+    ApigeeBoitePostaleRecord:
+      type: object
+      properties:
+        nomNaissance:
+          type: string
+        nomUsage:
+          type: string
+        prenom1:
+          type: string
+        prenom2:
+          type: string
+        dateNaissance:
+          type: string
+          format: date
+        bp:
+          type: string
+        codePostal:
+          type: string
+        localite:
+          type: string
+        utilisateursDeclares:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApigeeUtilisateurDeclareRecord'
+        statutContrat:
+          type: string
+          enum:
+          - ACTIF
+          - BROUILLON
+          - RESILIE
+        dateCreation:
+          type: string
+          format: date-time
+        dateMiseAJour:
+          type: string
+          format: date-time
+    ApigeeUtilisateurDeclareRecord:
+      type: object
+      properties:
+        nom:
+          type: string
+        prenom:
+          type: string
+    PageApigeeBoitePostaleRecord:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApigeeBoitePostaleRecord'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+  securitySchemes:
+    Mettre le token JWT sans le bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

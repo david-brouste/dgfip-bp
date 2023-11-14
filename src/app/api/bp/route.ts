@@ -24,7 +24,7 @@ export async function GET(request: Request) {
     const size: number = parseIntDefault(searchParams.get('size'), DEFAULT_PAGE_SIZE);
 
     try {
-// Appliquez la recherche par nom et prénom
+        // Appliquez la recherche par nom et prénom
         let titulaireList: Titulaire[] = JSON.parse(fs.readFileSync(process.cwd() + '/public/db.json','utf-8'));
         if (nom) {
             titulaireList = titulaireList.filter(

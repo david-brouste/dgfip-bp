@@ -46,7 +46,7 @@
   width: var(--max-width);
 }
 
-.card {
+.card, .button {
   padding: 1rem 1.2rem;
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
@@ -54,7 +54,17 @@
   transition: background 200ms, border 200ms;
 }
 
-.card span {
+.button {
+  margin-left: 1rem;
+  background: rgba(var(--card-rgb), 0.5);
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
+}
+
+.button:hover {
+  cursor: grab;
+}
+
+.card span, .button span {
   display: inline-block;
   transition: transform 200ms;
 }
@@ -64,7 +74,7 @@
   margin-bottom: 0.7rem;
 }
 
-.card p {
+.card p, .button p {
   margin: 0;
   opacity: 0.6;
   font-size: 0.9rem;
@@ -109,18 +119,18 @@
 }
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
-  .card:hover {
+  .card:hover, .button:hover {
     background: rgba(var(--card-rgb), 0.1);
     border: 1px solid rgba(var(--card-border-rgb), 0.15);
   }
 
-  .card:hover span {
+  .card:hover span, .button:hover span {
     transform: translateX(4px);
   }
 }
 
 @media (prefers-reduced-motion) {
-  .card:hover span {
+  .card:hover span, .button:hover span {
     transform: none;
   }
 }
@@ -138,11 +148,11 @@
     text-align: center;
   }
 
-  .card {
+  .card, .button {
     padding: 1rem 2.5rem;
   }
 
-  .card h2 {
+  .card h2, .button h2 {
     margin-bottom: 0.5rem;
   }
 
