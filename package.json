@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "engines": {
-    "node": ">=18.18.0",
-    "yarn": ">=1.22.19"
+    "node": ">=18.17.1",
+    "yarn": ">=1.22.17"
   },
   "dependencies": {
     "@faker-js/faker": "^8.2.0",
