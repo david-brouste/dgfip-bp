@@ -328,7 +328,7 @@ export function generateTitulaire(nbTitulaire: number): Titulaire[] {
 export function createRandomTitulaire(): Titulaire {
     const dateNaissance = fakerFR.date.birthdate().toISOString().split('T')[0];
     const sexType: SexType = fakerFR.person.sexType();
-    const isNomUsage = randomBoolean();
+    const isNomNaissance = randomBoolean();
     const isPrenom2 = randomBoolean();
     const isUtilisateurDeclare = Math.random() < 0.3;
     const nbUtilisateursDeclares = random(1, 9);
@@ -337,8 +337,8 @@ export function createRandomTitulaire(): Titulaire {
         StatutContrat.ACTIF :
         (Math.random() < 0.96 ? StatutContrat.RESILIE : StatutContrat.BROUILLON);
     return {
-        nomNaissance: fakerFR.person.lastName(sexType).toUpperCase(),
-        nomUsage: sexType === 'female' && isNomUsage ? fakerFR.person.lastName(sexType).toUpperCase(): undefined,
+        nomNaissance: sexType === 'female' && isNomNaissance ? fakerFR.person.lastName(sexType).toUpperCase(): undefined,
+        nomUsage: fakerFR.person.lastName(sexType).toUpperCase(),
         prenom1: capitalizePrenom(fakerFR.person.firstName(sexType)) as string,
         prenom2: isPrenom2 ? capitalizePrenom(fakerFR.person.middleName(sexType)) : undefined,
         dateNaissance: dateNaissance,

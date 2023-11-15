@@ -31,8 +31,8 @@ export async function GET(request: Request) {
         if (nom) {
             titulaireList = titulaireList.filter(
                 (titulaire: Titulaire) => {
-                    const isIncludedInNomNaissance = !!normalizeLowerString(titulaire.nomNaissance)?.includes(nom);
-                    const isIncludedInNomUsage = etendreNomNaissance && !!normalizeLowerString(titulaire.nomUsage)?.includes(nom);
+                    const isIncludedInNomNaissance = etendreNomNaissance && !!normalizeLowerString(titulaire.nomNaissance)?.includes(nom);
+                    const isIncludedInNomUsage = !!normalizeLowerString(titulaire.nomUsage)?.includes(nom);
                     const isIncludedInUtilisateursDeclares = titulaire.utilisateursDeclares
                         .map((utilisateurDeclare: UtilisateurDeclare) => normalizeLowerString(utilisateurDeclare.nom))
                         .some((nomUtilisateur: string|undefined) => nomUtilisateur?.includes(nom));
