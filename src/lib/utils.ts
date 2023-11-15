@@ -343,7 +343,7 @@ export function createRandomTitulaire(): Titulaire {
         prenom2: isPrenom2 ? capitalizePrenom(fakerFR.person.middleName(sexType)) : undefined,
         dateNaissance: dateNaissance,
         bp: fakerFR.location.zipCode('####').replace(/^0+/, ''),
-        codePostal: bp.code,
+        codePostal: bp.code.toString(),
         localite: bp.localite,
         utilisateursDeclares: isUtilisateurDeclare ?
             fakerFR.helpers.multiple(createRandomUtilisateurDeclare, {count: nbUtilisateursDeclares}) :

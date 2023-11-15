@@ -1,15 +1,17 @@
 openapi: 3.1.0
 info:
-  title: OpenAPI definition for Apigee Controller
+  title: OpenAPI definition
   version: v1
 servers:
-- url: https://dgfip-bp.vercel.app
-  description: Apigee Boite Postale Testing Server
+- url: http://localhost:8080
+  description: Generated server url
+security:
+- Mettre le token JWT sans le bearer: []
 tags:
 - name: Apigee
   description: API mise à disposition depuis la plateforme APIGEE
 paths:
-  /api/bp:
+  /b2b/apigee/v1/boites-postales:
     get:
       tags:
       - Apigee
@@ -36,12 +38,31 @@ paths:
         schema:
           type: boolean
           default: false
-      - name: pageable
+      - name: page
         in: query
-        description: pageable pour la pagination
+        description: Zero-based page index (0..N)
         required: false
         schema:
-          $ref: '#/components/schemas/Pageable'
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
       responses:
         "400":
           description: Un des paramètres est incorrect
@@ -64,9 +85,53 @@ paths:
         "200":
           description: Retourne une page correspondant aux critères de recherches
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: '#/components/schemas/PageApigeeBoitePostaleRecord'
+                $ref: '#/components/schemas/ApigeeBoitePostaleRecordPage'
+              examples:
+                example1:
+                  summary: 1 résultat
+                  description: Exemple de réponse avec 1 résultat
+                  value:
+                    content:
+                    - nomNaissance: COLIN
+                      nomUsage: RIVIERE
+                      prenom1: Acanthe
+                      prenom2: Violet
+                      dateNaissance: 1947-04-20
+                      bp: "3217"
+                      codePostal: "98806"
+                      localite: NOUMEA CEDEX
+                      utilisateursDeclares:
+                      - nom: GAUTHIER
+                        prenom: Angélina
+                      - nom: BERGER
+                        prenom: Grégoire
+                      statutContrat: ACTIF
+                      dateCreation: 2015-11-19T00:00:00.000Z
+                      dateMiseAJour: 2023-02-14T10:34:57.272Z
+                    pageable:
+                      sort:
+                        unsorted: true
+                        sorted: false
+                        empty: true
+                      offset: 0
+                      pageSize: 1
+                      pageNumber: 0
+                      paged: true
+                      unpaged: false
+                    last: false
+                    totalElements: 200
+                    totalPages: 200
+                    size: 1
+                    number: 0
+                    sort:
+                      unsorted: true
+                      sorted: false
+                      empty: true
+                    first: true
+                    numberOfElements: 1
+                    empty: false
 components:
   schemas:
     GeneriqueError:
@@ -77,21 +142,6 @@ components:
         status:
           type: integer
           format: int32
-    Pageable:
-      type: object
-      properties:
-        page:
-          minimum: 0
-          type: integer
-          format: int32
-        size:
-          minimum: 1
-          type: integer
-          format: int32
-        sort:
-          type: array
-          items:
-            type: string
     ApigeeBoitePostaleRecord:
       type: object
       properties:
@@ -125,19 +175,22 @@ components:
         dateCreation:
           type: string
           format: date-time
+          description: 'date de création en UTC'
         dateMiseAJour:
           type: string
           format: date-time
-    ApigeeUtilisateurDeclareRecord:
+          description: 'date de mise à jour en UTC'
+    ApigeeBoitePostaleRecordPage:
       type: object
       properties:
-        nom:
-          type: string
-        prenom:
-          type: string
-    PageApigeeBoitePostaleRecord:
-      type: object
-      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApigeeBoitePostaleRecord'
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
         totalElements:
           type: integer
           format: int64
@@ -147,10 +200,6 @@ components:
         size:
           type: integer
           format: int32
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApigeeBoitePostaleRecord'
         number:
           type: integer
           format: int32
@@ -158,15 +207,18 @@ components:
           $ref: '#/components/schemas/SortObject'
         first:
           type: boolean
-        last:
-          type: boolean
-        pageable:
-          $ref: '#/components/schemas/PageableObject'
         numberOfElements:
           type: integer
           format: int32
         empty:
           type: boolean
+    ApigeeUtilisateurDeclareRecord:
+      type: object
+      properties:
+        nom:
+          type: string
+        prenom:
+          type: string
     PageableObject:
       type: object
       properties:
@@ -175,9 +227,6 @@ components:
           format: int64
         sort:
           $ref: '#/components/schemas/SortObject'
-        pageNumber:
-          type: integer
-          format: int32
         pageSize:
           type: integer
           format: int32
@@ -185,6 +234,9 @@ components:
           type: boolean
         unpaged:
           type: boolean
+        pageNumber:
+          type: integer
+          format: int32
     SortObject:
       type: object
       properties:

@@ -13,7 +13,7 @@ export type Titulaire = {
     prenom2: string|undefined,
     dateNaissance: string,
     bp: string,
-    codePostal: number,
+    codePostal: string,
     localite: string,
     utilisateursDeclares: UtilisateurDeclare[],
     statutContrat: StatutContrat,

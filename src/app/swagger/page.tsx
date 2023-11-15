@@ -1,10 +1,10 @@
 'use client';
 
+import ReactSwagger from './react-swagger';
 import {useEffect, useState} from "react";
-import YAML from "yaml";
 
 export default function IndexPage() {
-    const [spec, setSpec] = useState<undefined|string>(undefined);
+    const [spec, setSpec] = useState(undefined);
     const [loading, setLoading] = useState<boolean>(true);
     useEffect(() => {
         getOpenApiSpec();
@@ -14,8 +14,7 @@ export default function IndexPage() {
         const response: Response = await fetch('/api/spec');
         if (response.status === 200) {
             const spec = await response.json();
-            const yaml = YAML.stringify(spec);
-            setSpec(yaml);
+            setSpec(spec);
         } else {
             console.error(response);
         }
@@ -26,8 +25,8 @@ export default function IndexPage() {
     if (!spec && !loading) return <div>Une erreur s'est produite</div>;
     if (!spec) return;
     return (
-        <div>
-            <pre>{spec}</pre>
-        </div>
+        <section className="container">
+            <ReactSwagger spec={spec} />
+        </section>
     );
 }
