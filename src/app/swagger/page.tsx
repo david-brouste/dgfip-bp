@@ -22,7 +22,7 @@ export default function IndexPage() {
     };
 
     if (!spec && loading) return <div>Loading...</div>;
-    if (!spec && !loading) return <div>Une erreur s'est produite</div>;
+    if (!spec && !loading) return <div>Une erreur s&apos;est produite</div>;
     if (!spec) return;
     return (
         <section className="container">
