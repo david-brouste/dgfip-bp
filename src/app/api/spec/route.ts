@@ -5,6 +5,7 @@ export async function GET(): Promise<Response> {
         const spec = await getApiDocs();
         return Response.json(spec);
     } catch (e) {
+        console.error(e);
         const errorMessage = {
             error: 'Une erreur s\'est produite lors de la récupération de la spec',
             status: 500
