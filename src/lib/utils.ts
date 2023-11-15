@@ -337,10 +337,10 @@ export function createRandomTitulaire(): Titulaire {
         StatutContrat.ACTIF :
         (Math.random() < 0.96 ? StatutContrat.RESILIE : StatutContrat.BROUILLON);
     return {
-        nomNaissance: sexType === 'female' && isNomNaissance ? fakerFR.person.lastName(sexType).toUpperCase(): undefined,
+        nomNaissance: sexType === 'female' && isNomNaissance ? fakerFR.person.lastName(sexType).toUpperCase(): null,
         nomUsage: fakerFR.person.lastName(sexType).toUpperCase(),
         prenom1: capitalizePrenom(fakerFR.person.firstName(sexType)) as string,
-        prenom2: isPrenom2 ? capitalizePrenom(fakerFR.person.middleName(sexType)) : undefined,
+        prenom2: isPrenom2 ? capitalizePrenom(fakerFR.person.middleName(sexType)) : null,
         dateNaissance: dateNaissance,
         bp: fakerFR.location.zipCode('####').replace(/^0+/, ''),
         codePostal: bp.code.toString(),
@@ -393,9 +393,9 @@ export function normalizeLowerString(input: string | undefined | null): string|u
         .trim();
 }
 
-export function capitalizePrenom(input: string | undefined | null): string | undefined {
+export function capitalizePrenom(input: string | undefined | null): string | null {
     if (!input || input.trim() === '') {
-        return undefined;
+        return null;
     }
     return input
         .split('-')

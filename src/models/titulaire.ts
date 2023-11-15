@@ -7,10 +7,10 @@ export enum StatutContrat {
 }
 
 export type Titulaire = {
-    nomNaissance: string|undefined,
+    nomNaissance: string|null,
     nomUsage: string,
     prenom1: string,
-    prenom2: string|undefined,
+    prenom2: string|null,
     dateNaissance: string,
     bp: string,
     codePostal: string,
