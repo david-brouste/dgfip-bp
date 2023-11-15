@@ -328,7 +328,7 @@ export function generateTitulaire(nbTitulaire: number): Titulaire[] {
 export function createRandomTitulaire(): Titulaire {
     const dateNaissance = fakerFR.date.birthdate().toISOString().split('T')[0];
     const sexType: SexType = fakerFR.person.sexType();
-    const isNomUsage = randomBoolean();
+    const isNomNaissance = randomBoolean();
     const isPrenom2 = randomBoolean();
     const isUtilisateurDeclare = Math.random() < 0.3;
     const nbUtilisateursDeclares = random(1, 9);
@@ -337,13 +337,13 @@ export function createRandomTitulaire(): Titulaire {
         StatutContrat.ACTIF :
         (Math.random() < 0.96 ? StatutContrat.RESILIE : StatutContrat.BROUILLON);
     return {
-        nomNaissance: fakerFR.person.lastName(sexType).toUpperCase(),
-        nomUsage: sexType === 'female' && isNomUsage ? fakerFR.person.lastName(sexType).toUpperCase(): undefined,
+        nomNaissance: sexType === 'female' && isNomNaissance ? fakerFR.person.lastName(sexType).toUpperCase(): null,
+        nomUsage: fakerFR.person.lastName(sexType).toUpperCase(),
         prenom1: capitalizePrenom(fakerFR.person.firstName(sexType)) as string,
-        prenom2: isPrenom2 ? capitalizePrenom(fakerFR.person.middleName(sexType)) : undefined,
+        prenom2: isPrenom2 ? capitalizePrenom(fakerFR.person.middleName(sexType)) : null,
         dateNaissance: dateNaissance,
         bp: fakerFR.location.zipCode('####').replace(/^0+/, ''),
-        codePostal: bp.code,
+        codePostal: bp.code.toString(),
         localite: bp.localite,
         utilisateursDeclares: isUtilisateurDeclare ?
             fakerFR.helpers.multiple(createRandomUtilisateurDeclare, {count: nbUtilisateursDeclares}) :
@@ -393,9 +393,9 @@ export function normalizeLowerString(input: string | undefined | null): string|u
         .trim();
 }
 
-export function capitalizePrenom(input: string | undefined | null): string | undefined {
+export function capitalizePrenom(input: string | undefined | null): string | null {
     if (!input || input.trim() === '') {
-        return undefined;
+        return null;
     }
     return input
         .split('-')

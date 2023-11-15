@@ -4,6 +4,7 @@ import {Titulaire} from "@/models/titulaire";
 import {normalizeLowerString, parseBooleanWithException, parseIntDefault} from "@/lib/utils";
 import {DEFAULT_PAGE_SIZE, FIRST_PAGE} from "@/lib/constants";
 import {UtilisateurDeclare} from "@/models/utilisateur-declare";
+import path from "path";
 
 export async function GET(request: Request) {
     const {searchParams} = new URL(request.url);
@@ -24,13 +25,14 @@ export async function GET(request: Request) {
     const size: number = parseIntDefault(searchParams.get('size'), DEFAULT_PAGE_SIZE);
 
     try {
-// Appliquez la recherche par nom et prénom
-        let titulaireList: Titulaire[] = JSON.parse(fs.readFileSync(process.cwd() + '/public/db.json','utf-8'));
+        // Appliquez la recherche par nom et prénom
+        const fullPath: string = path.join(process.cwd(), 'src', 'lib', 'db.json');
+        let titulaireList: Titulaire[] = JSON.parse(fs.readFileSync(fullPath,'utf-8'));
         if (nom) {
             titulaireList = titulaireList.filter(
                 (titulaire: Titulaire) => {
-                    const isIncludedInNomNaissance = !!normalizeLowerString(titulaire.nomNaissance)?.includes(nom);
-                    const isIncludedInNomUsage = etendreNomNaissance && !!normalizeLowerString(titulaire.nomUsage)?.includes(nom);
+                    const isIncludedInNomNaissance = etendreNomNaissance && !!normalizeLowerString(titulaire.nomNaissance)?.includes(nom);
+                    const isIncludedInNomUsage = !!normalizeLowerString(titulaire.nomUsage)?.includes(nom);
                     const isIncludedInUtilisateursDeclares = titulaire.utilisateursDeclares
                         .map((utilisateurDeclare: UtilisateurDeclare) => normalizeLowerString(utilisateurDeclare.nom))
                         .some((nomUtilisateur: string|undefined) => nomUtilisateur?.includes(nom));
@@ -55,6 +57,7 @@ export async function GET(request: Request) {
 
         return Response.json(titulairePage);
     } catch (e) {
+        console.error(e);
         const errorMessage = {
             error: 'Une erreur interne s\'est produite',
             status: 500

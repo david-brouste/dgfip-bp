@@ -1,0 +1,253 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v1
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+security:
+- Mettre le token JWT sans le bearer: []
+tags:
+- name: Apigee
+  description: API mise à disposition depuis la plateforme APIGEE
+paths:
+  /b2b/apigee/v1/boites-postales:
+    get:
+      tags:
+      - Apigee
+      summary: Renvoi tous les contrats correspondant aux critères de recherches sous
+        forme paginée
+      operationId: getAllBoitesPostales
+      parameters:
+      - name: nom
+        in: query
+        description: nom de naissance du titulaire ou de la personne déclarée
+        required: false
+        schema:
+          type: string
+      - name: prenom
+        in: query
+        description: prenom du titulaire ou de la personne déclarée
+        required: false
+        schema:
+          type: string
+      - name: etendreNomNaissance
+        in: query
+        description: booleen pour étendre la recherche au nom de naissance
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          minimum: 0
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+          default: 20
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "400":
+          description: Un des paramètres est incorrect
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneriqueError'
+              example:
+                error: "etendreNomNaissance doit être du type boolean: dzqd"
+                status: 400
+        "500":
+          description: Une erreur interne s'est produite lors de la recherche
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneriqueError'
+              example:
+                error: Une erreur interne s'est produite
+                status: 500
+        "200":
+          description: Retourne une page correspondant aux critères de recherches
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApigeeBoitePostaleRecordPage'
+              examples:
+                example1:
+                  summary: 1 résultat
+                  description: Exemple de réponse avec 1 résultat
+                  value:
+                    content:
+                    - nomNaissance: COLIN
+                      nomUsage: RIVIERE
+                      prenom1: Acanthe
+                      prenom2: Violet
+                      dateNaissance: 1947-04-20
+                      bp: "3217"
+                      codePostal: "98806"
+                      localite: NOUMEA CEDEX
+                      utilisateursDeclares:
+                      - nom: GAUTHIER
+                        prenom: Angélina
+                      - nom: BERGER
+                        prenom: Grégoire
+                      statutContrat: ACTIF
+                      dateCreation: 2015-11-19T00:00:00.000Z
+                      dateMiseAJour: 2023-02-14T10:34:57.272Z
+                    pageable:
+                      sort:
+                        unsorted: true
+                        sorted: false
+                        empty: true
+                      offset: 0
+                      pageSize: 1
+                      pageNumber: 0
+                      paged: true
+                      unpaged: false
+                    last: false
+                    totalElements: 200
+                    totalPages: 200
+                    size: 1
+                    number: 0
+                    sort:
+                      unsorted: true
+                      sorted: false
+                      empty: true
+                    first: true
+                    numberOfElements: 1
+                    empty: false
+components:
+  schemas:
+    GeneriqueError:
+      type: object
+      properties:
+        error:
+          type: string
+        status:
+          type: integer
+          format: int32
+    ApigeeBoitePostaleRecord:
+      type: object
+      properties:
+        nomNaissance:
+          type: string
+        nomUsage:
+          type: string
+        prenom1:
+          type: string
+        prenom2:
+          type: string
+        dateNaissance:
+          type: string
+          format: date
+        bp:
+          type: string
+        codePostal:
+          type: string
+        localite:
+          type: string
+        utilisateursDeclares:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApigeeUtilisateurDeclareRecord'
+        statutContrat:
+          type: string
+          enum:
+          - ACTIF
+          - BROUILLON
+          - RESILIE
+        dateCreation:
+          type: string
+          format: date-time
+          description: 'date de création en UTC'
+        dateMiseAJour:
+          type: string
+          format: date-time
+          description: 'date de mise à jour en UTC'
+    ApigeeBoitePostaleRecordPage:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApigeeBoitePostaleRecord'
+        pageable:
+          $ref: '#/components/schemas/PageableObject'
+        last:
+          type: boolean
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        first:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    ApigeeUtilisateurDeclareRecord:
+      type: object
+      properties:
+        nom:
+          type: string
+        prenom:
+          type: string
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/SortObject'
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+  securitySchemes:
+    Mettre le token JWT sans le bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
