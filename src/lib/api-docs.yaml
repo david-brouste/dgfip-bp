@@ -64,15 +64,6 @@ paths:
           items:
             type: string
       responses:
-        "400":
-          description: Un des paramètres est incorrect
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GeneriqueError'
-              example:
-                error: "etendreNomNaissance doit être du type boolean: dzqd"
-                status: 400
         "500":
           description: Une erreur interne s'est produite lors de la recherche
           content:
@@ -82,6 +73,15 @@ paths:
               example:
                 error: Une erreur interne s'est produite
                 status: 500
+        "400":
+          description: Un des paramètres est incorrect
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneriqueError'
+              example:
+                error: "etendreNomNaissance doit être du type boolean: dzqd"
+                status: 400
         "200":
           description: Retourne une page correspondant aux critères de recherches
           content:
@@ -143,43 +143,73 @@ components:
           type: integer
           format: int32
     ApigeeBoitePostaleRecord:
+      required:
+      - bp
+      - codePostal
+      - dateCreation
+      - dateMiseAJour
+      - dateNaissance
+      - localite
+      - nomUsage
+      - prenom1
+      - statutContrat
       type: object
       properties:
         nomNaissance:
           type: string
+          description: Nom de naissance du titulaire
+          example: COLIN
         nomUsage:
           type: string
+          description: Nom d'usage du titulaire
+          example: RIVIERE
         prenom1:
           type: string
+          description: Prenom1 du titulaire
+          example: Acanthe
         prenom2:
           type: string
+          description: Prenom2 du titulaire
+          example: Violet
         dateNaissance:
           type: string
+          description: Date de naissance du titulaire
           format: date
+          example: 1947-04-20
         bp:
           type: string
+          description: Numéro de boite postale
+          example: "3217"
         codePostal:
           type: string
+          description: Code postal de la boite postale
+          example: "98806"
         localite:
           type: string
+          description: Localité de la boite postale
+          example: NOUMEA CEDEX
         utilisateursDeclares:
           type: array
           items:
             $ref: '#/components/schemas/ApigeeUtilisateurDeclareRecord'
         statutContrat:
           type: string
+          description: Statut du contrat
+          example: ACTIF
           enum:
           - ACTIF
           - BROUILLON
           - RESILIE
         dateCreation:
           type: string
+          description: Date de création du contrat au format UTC
           format: date-time
-          description: 'date de création en UTC'
+          example: 2015-11-19T00:00:00Z
         dateMiseAJour:
           type: string
+          description: Date de dernière mise à jour du contrat au format UTC
           format: date-time
-          description: 'date de mise à jour en UTC'
+          example: 2023-02-14T10:34:57.272Z
     ApigeeBoitePostaleRecordPage:
       type: object
       properties:
@@ -217,8 +247,12 @@ components:
       properties:
         nom:
           type: string
+          description: Nom de l'utilisateur déclaré
+          example: GAUTHIER
         prenom:
           type: string
+          description: Prenom de l'utilisateur déclaré
+          example: Henry
     PageableObject:
       type: object
       properties:
@@ -227,22 +261,22 @@ components:
           format: int64
         sort:
           $ref: '#/components/schemas/SortObject'
-        pageSize:
+        pageNumber:
           type: integer
           format: int32
         paged:
           type: boolean
-        unpaged:
-          type: boolean
-        pageNumber:
+        pageSize:
           type: integer
           format: int32
+        unpaged:
+          type: boolean
     SortObject:
       type: object
       properties:
-        sorted:
-          type: boolean
         unsorted:
+          type: boolean
+        sorted:
           type: boolean
         empty:
           type: boolean
